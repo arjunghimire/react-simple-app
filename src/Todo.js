@@ -21,24 +21,49 @@
  *   SOFTWARE.
  */
 
-import "./App.css";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Todo from "./Todo";
-import TodoView from "./TodoView";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
-function App() {
+const Todo = () => {
+  const [todos, setTodos] = useState([]);
+  const [pageCount, setPageCount] = useState(5);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        "https://jsonplaceholder.typicode.com/todos/"
+      );
+      setTodos(response.data);
+    } catch (e) {
+      console.warn("Error");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleClick = () => {
+    setPageCount(pageCount + 5);
+  };
   return (
-    <div className="App">
-      <Router>
-        <div>
-          <Switch>
-            <Route component={Todo} exact path="/" />
-            <Route exact component={TodoView} path="/todo/:id" />
-          </Switch>
-        </div>
-      </Router>
+    <div>
+      {todos.length > 0 ? (
+        todos.slice(0, pageCount).map((todo) => {
+          return (
+            <Link key={todo.id} to={`/todo/${todo.id}`}>
+              {todo.title}
+            </Link>
+          );
+        })
+      ) : (
+        <p>Loading ...</p>
+      )}
+
+      <button onClick={handleClick}>Load More</button>
     </div>
   );
-}
+};
 
-export default App;
+export default Todo;

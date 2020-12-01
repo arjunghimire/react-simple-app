@@ -21,24 +21,16 @@
  *   SOFTWARE.
  */
 
-import "./App.css";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Todo from "./Todo";
-import TodoView from "./TodoView";
+import React from "react";
 
-function App() {
+const List = ({ title, userId, id }) => {
   return (
-    <div className="App">
-      <Router>
-        <div>
-          <Switch>
-            <Route component={Todo} exact path="/" />
-            <Route exact component={TodoView} path="/todo/:id" />
-          </Switch>
-        </div>
-      </Router>
+    <div>
+      <h4>Title: {title}</h4>
+      <p>UserId: {userId}</p>
+      <p>Id: {id}</p>
     </div>
   );
-}
+};
 
-export default App;
+export default List;
